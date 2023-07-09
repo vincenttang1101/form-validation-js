@@ -53,24 +53,27 @@ function Validator(options) {
           isFormValid = false;
         }
       });
-      const enableInputs = formElement.querySelectorAll(
-        "[name]:not([disabled])"
-      );
-      var formValues = Array.from(enableInputs).reduce(function (
-        values,
-        input
-      ) {
-        values[input.name] = input.value;
-        return values;
-      },
-      {});
-      console.log(formValues);
-      console.log(enableInputs);
+
       if (isFormValid) {
+        // Trường hợp submit với Javascript
         if (typeof options.onSubmit === "function") {
-          options.onSubmit({
-            name: "Q",
-          });
+          const enableInputs = formElement.querySelectorAll(
+            "[name]:not([disabled])"
+          );
+
+          const formValues = Array.from(enableInputs).reduce(function (
+            values,
+            input
+          ) {
+            values[input.name] = input.value;
+            return values;
+          },
+          {});
+          options.onSubmit(formValues);
+        }
+        // Trường hợp submit với hành vi mặc định
+        else {
+          formElement.submit();
         }
       }
     };
